@@ -5,18 +5,21 @@ require 'optparse'
 class Opt
 
   def initialize
-    getOpt
-    analysis(params)
+    @params = check(get_opt)
+  end
+
+  def param # オプションの表示
+    @params
   end
   
-  # オプションから情報を入手
-  def getOpt
+
+  def get_opt # オプションから情報を入手
     opt = OptionParser.new
-    params = {}
+    params = {f:["sample.log"]} # 初期値の設定
     begin
-      opt.on('-m [mode]', '--mode [mode]')  {|v| params[:m] = v}
-      opt.on('-f [file]', '--file [file]')  {|v| params[:f] = v}
-      opt.on('-t [time]', '--time [time]')  {|v| params[:t] = v}
+#      opt.on('-m', '--mode [mode]')  {|v| params[:m] = v}
+#      opt.on('-t', '--time=STARTTIME-ENDTIME')  {|v| params[:t] = v}
+      opt.on('-f FILE,FILE,...', '--file=FILE,FILE,...', Array, 'input files(default:sample.log)')  {|v| params[:f] = v}
       opt.parse!(ARGV)
     rescue => e
       puts "ERROR: #{e}.\n See #{opt}"
@@ -25,8 +28,14 @@ class Opt
     return params
   end
 
-  def analysis(params)
-    # 入力の解析
+  def check(params) # オプションの有効判定
+    for f_name in params[:f] # -fでのファイル名が存在しないとエラー終了
+      unless File.exist?(f_name)
+        STDERR.print "ERROR! input_file #{f_name} is nothing!\n"
+        exit 1
+      end
+    end
+    params
   end
   
 end

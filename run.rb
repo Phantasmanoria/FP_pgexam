@@ -13,6 +13,8 @@ require path + "/log"
 
 
 #全体実行部分
-list = Input.new()
+option = Opt.new
+params = option.param
+list = Input.new(params[:f])
 Display.hourdisp(Analisys.hour(list.data).sort)
 Display.hostdisp(Analisys.host(list.data).sort)
