@@ -13,4 +13,5 @@ require path + "/log"
 
 
 # 全体実行部分
-Input.new()
+list = Input.new()
+list.data
