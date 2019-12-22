@@ -16,5 +16,6 @@ require path + "/log"
 option = Opt.new
 params = option.param
 list = Input.new(params[:f])
-Display.hourdisp(Analisys.hour(list.data).sort)
-Display.hostdisp(Analisys.host(list.data).sort)
+Display.hourdisp(Analisys.hour(list.data).sort) if params[:m].include?("HOUR")
+Display.hostdisp(Analisys.host(list.data).sort) if params[:m].include?("HOST")
+
