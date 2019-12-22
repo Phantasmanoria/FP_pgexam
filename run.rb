@@ -14,5 +14,5 @@ require path + "/log"
 
 #全体実行部分
 list = Input.new()
-Display.disp(Analisys.hour(list.data))
-
+Display.hourdisp(Analisys.hour(list.data).sort)
+Display.hostdisp(Analisys.host(list.data).sort)

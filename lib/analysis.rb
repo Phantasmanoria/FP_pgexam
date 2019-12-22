@@ -19,9 +19,16 @@ class Analisys
     result
   end
 
-#  def self.host(data) #ホスト別のデータ分析
-#    result = 
-#  end
+  
+  def self.host(data) #ホスト別のデータ分析
+    result = {}
+    for d in data do
+      h = "h" + d[0].gsub(/\./, "_") #eval回避の為の置換(. => _)
+      eval("result[:#{h}] = 0") if eval("result[:#{h}].nil?") #値が存在していないなら0(後に+1される)
+      eval("result[:#{h}] += 1") #個数計算
+    end
+    result  
+  end
   
 end
 
