@@ -1,10 +1,9 @@
 # coding: utf-8
 
-
 class Input # ログの読み込み
 
   def initialize(opt_f, opt_t)
-    @data = input_file(opt_f, opt_t)
+    @data = input_file(opt_f, opt_t) 
   end
 
   
@@ -12,16 +11,16 @@ class Input # ログの読み込み
     @data
   end
 
-  
-  def input_file(files, opt_t) # ログの読み込み
+  private  
+  def input_file(files, opt_t) # ログの読み込みと書き込み分散
     result = Array.new
     for file in files # オプションのファイルリストから順次読み込み
-      File.foreach(file) do |line| # 1行ずつ読み取り(メモリ消費対策?)
+      File.foreach(file) do |line| # 1行ずつ読み取り(メモリ対策?)
         /^(.*) (.*) (.*) \[(.*)\] "(.*)" (.*) (.*) "(.*)" "(.*)"$/ =~ line
-        result.push([$1, $2, $3, $4, $5, $6, $7, $8, $9]) if judge($4, opt_t) # 各内容をresultに格納
+        result.push([$1, $4]) if judge($4, opt_t) # 必要な内容のみをresultに格納(メモリ対策)
       end
     end
-    result
+    result # 各内容リストを返す
   end
 
   
@@ -32,5 +31,6 @@ class Input # ログの読み込み
     return true if result_t.to_i >= start_t.to_i && result_t.to_i <= end_t.to_i #時間内判定
     return false
   end
-  
+
+
 end

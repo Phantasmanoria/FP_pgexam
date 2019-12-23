@@ -13,7 +13,7 @@ class Opt
     @params
   end
 
-  
+  private
   def get_opt # オプションから情報を入手
     opt = OptionParser.new
     params = {f:["sample.log"], # 初期値の設定
@@ -27,7 +27,7 @@ class Opt
              'time interval per hour(e.g. 2014040100-2019033123)(def:all)')  {|v| params[:t] = v}
       opt.on('-f [FILE,FILE,...]', Array,
              'input files (default:sample.log)')  {|v| params[:f] = v}
-      opt.on('-l', 'low-memory mode (default:off)')  {|v| params[:l] = v}
+      opt.on('-s', 'save memory mode (default:off)')  {|v| params[:s] = v}
       opt.parse!(ARGV)
     rescue => e # エラー処理
       puts "ERROR: #{e}.\n See #{opt}!"

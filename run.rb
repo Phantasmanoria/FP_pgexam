@@ -6,7 +6,7 @@ path = File.expand_path('./lib')
 require path + '/opt'
 require path + '/input'
 require path + "/analysis"
-require path + "/classification"
+require path + "/save"
 require path + "/display"
 require path + "/log"
 require path + "/convert"
@@ -14,14 +14,15 @@ require path + "/convert"
 
 
 #全体実行部分
-option = Opt.new
-params = option.param
-list = Input.new(params[:f], params[:t])
-a_list = Analysis.new(list.data, params[:m])
-#list = res.hour(a_list.data).sort
-#Display.hourdisp(list) if params[:m].include?("HOUR") # HOUR時にHOUR表示
+option = Opt.new # オプションの設定
+params = option.param # オプションの読み取り
 
-
-#Display.hourdisp(Analysis.hour(list.data).sort) if params[:m].include?("HOUR") # HOUR時にHOUR表示
-#Display.hostdisp(Analysis.host(list.data).sort) if params[:m].include?("HOST") # HOST時にHOST表示
+if params[:s].nil? # メモリセーブオプションで分岐を行う
+  list = Input.new(params[:f], params[:t]) # 情報読み取り
+  Analysis.new(list.data, params[:m]) # 情報分析と結果表示
+else
+  list = Input_Save.new(params[:f], params[:t]) # 情報読み取り
+  Analysis_Save.new(list.data, params[:m]) # 情報分析と結果表示
+  After_Save.remove # 後処理
+end
 
