@@ -23,10 +23,11 @@ class Opt
     begin
       opt.on('-m [MODE]', ['HOUR', 'HOST', 'BOTH'], Array,
              'mode (HOUR | HOST | BOTH) (default:BOTH)')  {|v| params[:m] = v}
-      opt.on('-t [STARTTIME-ENDTIME]', /[0-9]{10}\-[0-9]{10}/,
-             'time interval per hour(e.g. 20140401-20190331)(def:all)')  {|v| params[:t] = v}
+      opt.on('-t [STARTTIME-ENDTIME]', /[0-9]{2,10}\-[0-9]{2,10}/,
+             'time interval per hour(e.g. 20140401-20190331, 01-09)(def:all)')  {|v| params[:t] = v}
       opt.on('-f [FILE,FILE,...]', Array,
              'input files (default:sample.log)')  {|v| params[:f] = v}
+      opt.on('-l', 'low-memory mode (default:off)')  {|v| params[:l] = v}
       opt.parse!(ARGV)
     rescue => e # エラー処理
       puts "ERROR: #{e}.\n See #{opt}!"
@@ -54,8 +55,8 @@ class Opt
       STDERR.print "ERROR: invalid argument -t!(syntax error)\n"
       exit 1
     else # -tの構文が正しい時, 日付的に問題ないか否か(TODO:日付存在確認)
-      /([0-9]{8})\-([0-9]{8})/ =~ params[:t]
-      if $1.to_i > $2.to_i
+      start_t,end_t = Convert.time_split(params[:t])      
+      if start_t > end_t
         STDERR.print "ERROR: invalid argument -t!(time interval error)\n"
         exit 1
       end
