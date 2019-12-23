@@ -2,7 +2,7 @@
 
 class Display
 
-  def self.hourdisp(data) # 表示
+  def self.hour_disp(data) # 表示
     print "date              |Access times\n" # ljustとかで整えたほうが良さそう
     print "------------------------\n"
     for d in data
@@ -12,7 +12,7 @@ class Display
     puts
   end
 
-  def self.hostdisp(data) # 表示
+  def self.host_disp(data) # 表示
     print "Host name      |Access times\n"
     print "------------------------\n"
     for d in data
@@ -24,4 +24,5 @@ class Display
     puts
   end
 
+  
 end
