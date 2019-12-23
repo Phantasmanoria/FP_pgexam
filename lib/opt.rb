@@ -24,7 +24,7 @@ class Opt
       opt.on('-m [MODE]', ['HOUR', 'HOST', 'BOTH'], Array,
              'mode (HOUR | HOST | BOTH) (default:BOTH)')  {|v| params[:m] = v}
       opt.on('-t [STARTTIME-ENDTIME]', /[0-9]{2,10}\-[0-9]{2,10}/,
-             'time interval per hour(e.g. 20140401-20190331, 01-09)(def:all)')  {|v| params[:t] = v}
+             'time interval per hour(e.g. 2014040100-2019033123)(def:all)')  {|v| params[:t] = v}
       opt.on('-f [FILE,FILE,...]', Array,
              'input files (default:sample.log)')  {|v| params[:f] = v}
       opt.on('-l', 'low-memory mode (default:off)')  {|v| params[:l] = v}

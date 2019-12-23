@@ -15,16 +15,14 @@ class Convert
 
   
   def self.time_split(two_date) # 時間分割と時間補正を両方行う
-    now=Time.now
-    now=now.strftime("%Y%m%d%H")
-    t = two_date.match(/^([0-9]{2,10})\-([0-9]{2,10})$/)
+    now=Time.now # 現在時刻の取得
+    now=now.strftime("%Y%m%d%H") # 表示調整
+    t = two_date.match(/^([0-9]{2,10})\-([0-9]{2,10})$/) # 時間分割
     result = [t[1], t[2]]
     for d in 1..2
       for s in [2,4,6,10]
-        p t[d].size
         if t[d].size == s
-          p d
-          result[d-1] = now.slice(0,10-s) + t[d]
+          result[d-1] = now.slice(0,10-s) + t[d] #省かれていた部分を現在時間から追加
         end
       end
     end    
