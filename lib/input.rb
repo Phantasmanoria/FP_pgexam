@@ -17,6 +17,10 @@ class Input # ログの読み込み
     for file in files # オプションのファイルリストから順次読み込み
       File.foreach(file) do |line| # 1行ずつ読み取り(メモリ対策?)
         /^(.*) (.*) (.*) \[(.*)\] "(.*)" (.*) (.*) "(.*)" "(.*)"$/ =~ line
+        if $1.nil?
+          STDERR.print "ERROR: input_file #{file} is not a log file!\n"
+          exit 1
+        end
         result.push([$1, $4]) if judge($4, opt_t) # 必要な内容のみをresultに格納(メモリ対策)
       end
     end
