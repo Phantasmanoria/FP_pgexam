@@ -5,9 +5,9 @@ class Input_Save < Input # 機能改変も検討したがtmpが出されない�
   private
   def input_file(r_files, opt_t) # ログの読み込みと書き込み分散
     Dir.mkdir("tmp") unless Dir.exist?("./tmp") # 一時フォルダ作成
-    w_files = ["tmp/input_1.tmp"]
+    w_files = ["tmp/input_1"]
     c = 0 # カウント用変数
-    w_file = File.open("tmp/input_1.tmp", "w")
+    w_file = File.open("tmp/input_1", "w")
 
     for r_file in r_files # オプションのファイルリストから順次読み込み
       File.foreach(r_file) do |line| # 1行ずつ読み取り(メモリ対策?)
@@ -16,7 +16,7 @@ class Input_Save < Input # 機能改変も検討したがtmpが出されない�
         c += 1
         if c == 100000 # 一定毎に出力ファイルを分割(分割後の読み取りメモリ対策)(規定10万)
           w_file.close
-          n = "tmp/input_#{w_files.length+1}.tmp"
+          n = "tmp/input_#{w_files.length+1}"
           w_files.push(n)
           w_file = eval("File.open('#{n}', 'w+')")
           c = 0
@@ -55,7 +55,7 @@ class Analysis_Save < Analysis
     result = {} # 結果を入れる関数
     mode.downcase! # モード名の小文字化
     for d in data do # tmpファイル毎に読み取り
-      n = "tmp/ana_#{mode}_#{w_files.length+1}.tmp"
+      n = "tmp/ana_#{mode}_#{w_files.length+1}"
       w_files.push(n)
       w_file = eval("File.open('#{n}', 'w')")
 
@@ -72,7 +72,7 @@ class Analysis_Save < Analysis
         eval("result[:#{a}] += 1") # 個数計算
       end
 
-      for d in result.sort do # 各ファイル毎のソート結果をana.tmpリストファイルに書き込み
+      for d in result.sort do # 各ファイル毎のソート結果をanaリストファイルに書き込み
         w_file.puts("#{d[0]} #{d[1]}")
       end
       w_file.close
@@ -95,7 +95,7 @@ class Analysis_Save < Analysis
     tmp_result = {} # tmp用関数保存
     # ここでのtmpは表示をお預けするか否(すぐ表示)か, HOSTが二回回しが必要だと判断した為差別化した
     if tmp 
-      name = "tmp/ana_tmp_#{w_files.length+1}.tmp"
+      name = "tmp/ana_tmp_#{w_files.length+1}"
       w_files.push(name)
       w_file = eval("File.open('#{name}', 'w')")
     end
@@ -137,7 +137,7 @@ class Analysis_Save < Analysis
             w_file.puts("#{d[0]} #{d[1]}")
           end
           w_file.close
-          name = "tmp/ana_tmp_#{w_files.length+1}.tmp"
+          name = "tmp/ana_tmp_#{w_files.length+1}"
           w_files.push(name)
           w_file = eval("File.open('#{name}', 'w+')")
           c = 0 # 変数リセット
