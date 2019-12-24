@@ -37,19 +37,38 @@ class Analysis_Save < Analysis
   private
   def hour(in_files) # 時間別のデータ分析
     Display.top("HOUR")
+    ana_files = count(in_files,"HOUR")
+    unify_sort(ana_files)
+  end
 
+  
+  def host(in_files) # ホスト別のデータ分析
+    Display.top("HOST")
+    ana_files = count(in_files,"HOST")
+    unify_sort(ana_files)
+  end
+
+
+  def count(data, mode)
     w_files = []
     result = {} # 結果を入れる関数
-    for d in in_files do # tmpファイル毎に読み取り
-      n = "tmp/ana_hour_#{w_files.length+1}.tmp"
+    mode.downcase! # モード名の小文字化
+    for d in data do # tmpファイル毎に読み取り
+      n = "tmp/ana_#{mode}_#{w_files.length+1}.tmp"
       w_files.push(n)
       w_file = eval("File.open('#{n}', 'w')")
 
       File.foreach(d) do |line|
-        t = line[/^.* (.* .*)\n$/, 1] # 日時抽出
-        t = Convert.date_sort(t) # 日時変換
-        eval("result[:#{t}] = 0") if eval("result[:#{t}].nil?") # 値が存在していないなら0(後に+1される)
-        eval("result[:#{t}] += 1") # 個数計算
+        if mode == "hour"
+          a = line[/^.* (.* .*)\n$/, 1] # 日時抽出
+          a = Convert.date_sort(a) # 日時変換
+        end
+        if mode == "host"
+          a = "h" + line[/^(.*) .* .*\n$/, 1]
+          a.gsub!(/\./, "_") # eval回避の置換(. => _)
+        end
+        eval("result[:#{a}] = 0") if eval("result[:#{a}].nil?") # 値が存在していないなら0(後に+1される)
+        eval("result[:#{a}] += 1") # 個数計算
       end
 
       for d in result.sort do # 各ファイル毎のソート結果をana.tmpリストファイルに書き込み
@@ -58,37 +77,8 @@ class Analysis_Save < Analysis
       w_file.close
       result = {} # 初期化
     end
-
-    unify_sort(w_files) # 結合と出力を任せる
+    w_files
   end
-
-  
-  def host(in_files) # ホスト別のデータ分析
-    Display.top("HOST")
-
-    w_files = []
-    result = {} # 結果を入れる関数
-    for d in in_files do # tmpファイル毎に読み取り
-      n = "tmp/ana_host_#{w_files.length+1}.tmp"
-      w_files.push(n)
-      w_file = eval("File.open('#{n}', 'w')")
-
-      File.foreach(d) do |line|
-        h = "h" + line[/^(.*) .* .*\n$/, 1].gsub(/\./, "_") # eval回避の置換(. => _)(TODO:破壊的メソッドでメモリ削減)
-        eval("result[:#{h}] = 0") if eval("result[:#{h}].nil?") # 値が存在していないなら0(後に+1される)
-        eval("result[:#{h}] += 1") # 個数計算
-      end
-
-      for d in result.sort_by{ |_, v| -v } do # 各ファイル毎のソート結果をana.tmpリストファイルに書き込み
-        w_file.puts("#{d[0]} #{d[1]}")
-      end
-      w_file.close
-      result = {} # 初期化
-    end
-
-    unify_sort(w_files) # 結合と出力を任せる
-  end
-
 
   def unify_sort(ana_files) # 分割された分析済ファイルをメモリ考慮しつつ出力
 
