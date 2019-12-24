@@ -25,7 +25,8 @@ class Convert
           result[d-1] = now.slice(0,10-s) + t[d] #省かれていた部分を現在時間から追加
         end
       end
-    end    
+      return false if result[d-1].length != 10
+    end
     result
   end
 

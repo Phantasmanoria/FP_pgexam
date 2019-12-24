@@ -55,7 +55,12 @@ class Opt
       STDERR.print "ERROR: invalid argument -t!(syntax error)\n"
       exit 1
     else # -tの構文が正しい時, 日付的に問題ないか否か(TODO:日付存在確認)
-      start_t,end_t = Convert.time_split(params[:t])      
+      if Convert.time_split(params[:t]) 
+        start_t,end_t = Convert.time_split(params[:t])
+      else
+        STDERR.print "ERROR: invalid argument -t!(ommited syntax error)\n"        
+        exit 1
+      end
       if start_t > end_t
         STDERR.print "ERROR: invalid argument -t!(time interval error)\n"
         exit 1
