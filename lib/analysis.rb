@@ -28,7 +28,7 @@ class Analysis # 分析と結果表示(TODO: eval部分の統一 -> eval以外�
       eval("result[:#{h}] = 0") if eval("result[:#{h}].nil?") # 値が存在していないなら0(後に+1される)
       eval("result[:#{h}] += 1") # 個数計算
     end
-    Display.host(result.sort)
+    Display.host(result.sort_by{ |_, v| -v })
   end
   
 end

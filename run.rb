@@ -10,7 +10,6 @@ require path + '/input'
 require path + "/analysis"
 require path + "/save"
 require path + "/display"
-require path + "/log"
 require path + "/convert"
 
 

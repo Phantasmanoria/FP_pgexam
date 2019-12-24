@@ -80,7 +80,7 @@ class Analysis_Save < Analysis
         eval("result[:#{h}] += 1") # 個数計算
       end
 
-      for d in result.sort do # 各ファイル毎のソート結果をana.tmpリストファイルに書き込み
+      for d in result.sort_by{ |_, v| -v } do # 各ファイル毎のソート結果をana.tmpリストファイルに書き込み
         w_file.puts("#{d[0]} #{d[1]}")
       end
       w_file.close
