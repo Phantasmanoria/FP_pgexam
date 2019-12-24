@@ -19,7 +19,7 @@ class Convert
     now=now.strftime("%Y%m%d%H") # 表示調整
     t = two_date.match(/^([0-9]{2,10})\-([0-9]{2,10})$/) # 時間分割
     result = [t[1], t[2]]
-    for d in 1..2
+    for d in 1..2 do
       for s in [2,4,6,10]
         if t[d].size == s
           result[d-1] = now.slice(0,10-s) + t[d] #省かれていた部分を現在時間から追加
@@ -28,5 +28,20 @@ class Convert
     end    
     result
   end
+
+
+  def self.read_line(r_file, num) # 指定行のファイル読み込み
+    line_count = File.read(r_file).count("\n")
+#    p "#{line_count} : #{num} : #{line_count > num} "
+    if line_count > num
+      open(r_file) {|file|
+        l = file.readlines[num][/(.*)\n/, 1]
+        [l[/^(.*) (.*)$/, 1], l[/^(.*) (.*)$/, 2]]
+      }
+    else # エラー処理
+      nil
+    end
+  end
+
   
 end
