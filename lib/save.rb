@@ -5,7 +5,6 @@ class Input_Save < Input # 機能改変も検討したがtmpが出されない�
   private
   def input_file(r_files, opt_t) # ログの読み込みと書き込み分散
     Dir.mkdir("tmp") unless Dir.exist?("./tmp") # 一時フォルダ作成
-    Dir.mkdir("tmp") unless Dir.exist?("./tmp") # 一時フォルダ作成
     w_files = ["tmp/input_1.tmp"]
     c = 0 # カウント用変数
     w_file = File.open("tmp/input_1.tmp", "w")
@@ -105,7 +104,7 @@ class Analysis_Save < Analysis
     end
 
     loop {
-      for a in 0..ana_files.size-1 do # 候補読み取り(下限に来てたらdummy挿入)
+      for a in 0..ana_files.size-1 do # 各ファイルの候補読み取り(下限に来てたらdummy挿入)
         d = Convert.read_line(ana_files[a],files_line[a])
         unless d.nil?
           candidate.push([d[0], d[1]])
